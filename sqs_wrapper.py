@@ -2,6 +2,10 @@ import json
 import logging
 import boto3
 from botocore.exceptions import ClientError
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 
 logging.basicConfig(level=logging.INFO)
@@ -112,7 +116,7 @@ class SQS:
 
 
 sqs = SQS(sqs_resource,
-          'url')
+          os.getenv('SQS_URL'))
 
 
 att = {'Query': {
