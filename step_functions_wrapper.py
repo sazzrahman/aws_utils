@@ -47,4 +47,10 @@ class StepFunctions:
 
 sm_arn = os.getenv("SFN_ARN")
 sfn = StepFunctions(sfn_resource=sfn_resource, sm_arn=sm_arn)
-sfn.describe_state_machine()
+
+
+task_token = "abced"
+
+output = {"Payload": {"msg": "Hello from Local"}}
+
+sfn.send_task_success(token=task_token, output=json.dumps(output))

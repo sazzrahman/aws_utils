@@ -77,7 +77,8 @@ class SQS:
             #             },
 
             QueueUrl=self.queue_url,
-            DelaySeconds=10,
+            MessageGroupId="123",
+            # DelaySeconds=10,
             MessageAttributes=att,
             MessageBody=(body)
         )
@@ -88,7 +89,7 @@ class SQS:
         response = self.sqs.receive_message(
             QueueUrl=self.queue_url,
             AttributeNames=[
-                'All'
+                'SentTimestamp'
             ],
             MaxNumberOfMessages=10,
             MessageAttributeNames=[
@@ -99,7 +100,20 @@ class SQS:
         )
 
         logger.info(response)
-        # return response
+        return response
+
+    def get_queue_attributes(self):
+
+        # AttributeNames=[
+        #     'All'|'Policy'|'VisibilityTimeout'|'MaximumMessageSize'|'MessageRetentionPeriod'|'ApproximateNumberOfMessages'|'ApproximateNumberOfMessagesNotVisible'|'CreatedTimestamp'|'LastModifiedTimestamp'|'QueueArn'|'ApproximateNumberOfMessagesDelayed'|'DelaySeconds'|'ReceiveMessageWaitTimeSeconds'|'RedrivePolicy'|'FifoQueue'|'ContentBasedDeduplication'|'KmsMasterKeyId'|'KmsDataKeyReusePeriodSeconds'|'DeduplicationScope'|'FifoThroughputLimit'|'RedriveAllowPolicy'|'SqsManagedSseEnabled',
+        # ]
+
+        response = self.sqs.get_queue_attributes(
+            QueueUrl=self.queue_url,
+            AttributeNames=['All']
+
+        )
+        logger.info(response)
 
     def delete_fifo_message(self):
 
@@ -130,13 +144,17 @@ att = {'Query': {
     'StringValue': 'studios'},
     'Job': {
     'DataType': 'String',
-    'StringValue': 'Job123'},
+    'StringValue': 'Job1237'},
 }
 
 
-body = "This is a Job Queue 33"
+body = "This is a Job Queue 4"
 
 
 # sqs.send_message(att, body)
-sqs.receive_message()
+msg = sqs.receive_message()
+
+print(len(msg), "LENGTH of CUrrent MESSAGE")
+
 # sqs.delete_fifo_message()
+# sqs.get_queue_attributes()
